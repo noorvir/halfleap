@@ -1,21 +1,4 @@
--- Functions & Triggers
-create or replace function update_timestamptz()
-    returns trigger as
-$$
-begin
-    NEW.updated_at = now();
-    return NEW;
-end;
-$$ language 'plpgsql';
-
 -- Schema
-
-create table public.adapters
-(
-    id       uuid primary key     default gen_random_uuid(),
-    name     text        not null,
-    added_at timestamptz not null default now()
-);
 
 create table public.events
 (
@@ -26,11 +9,11 @@ create table public.events
     source     uuid                                    not null references adapters (id)
 );
 
-create table public.locations
+create table public.adapters
 (
-    id          uuid primary key default gen_random_uuid(),
-    coordinates point   not null,
-    is_exact    boolean not null
+    id       uuid primary key     default gen_random_uuid(),
+    name     text        not null,
+    added_at timestamptz not null default now()
 );
 
 create table public.contacts
@@ -48,6 +31,14 @@ create table public.contacts
     unique (first_name, last_name, birth_date, nationality, disambiguation)
 );
 
+
+create table public.locations
+(
+    id          uuid primary key default gen_random_uuid(),
+    coordinates point   not null,
+    is_exact    boolean not null
+);
+
 create table public.notes
 (
     id         uuid primary key     default gen_random_uuid(),
@@ -55,6 +46,17 @@ create table public.notes
     created_at timestamptz not null default now(),
     updated_at timestamptz not null default now()
 );
+
+-- Functions & Triggers
+create or replace function update_timestamptz()
+    returns trigger as
+$$
+begin
+    NEW.updated_at = now();
+    return NEW;
+end;
+$$ language 'plpgsql';
+
 
 create trigger notes_updated_at_timestamptz
     before update
@@ -77,3 +79,9 @@ create trigger resources_updated_at_timestamptz
     for each row
 execute procedure
     update_timestamptz();
+
+
+------------------------------------------------------------------------------------------
+-- Privileges and Policies
+------------------------------------------------------------------------------------------
+
