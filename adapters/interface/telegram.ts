@@ -14,7 +14,6 @@ export default class TelegramAdapter implements Listener, Publisher {
     this.handleUpdate = webhookCallback(this.bot);
 
     // Commands
-    this.bot.command("start", (ctx) => ctx.reply("Welcome! Up and running."));
     this.bot.command(
       "ping",
       (ctx) => ctx.reply(`Pong! ${new Date()} ${Date.now()}`),
