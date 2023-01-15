@@ -1,23 +1,29 @@
 import { Bot, webhookCallback } from "https://deno.land/x/grammy@v1.8.3/mod.ts";
 
-const bot = new Bot(Deno.env.get("TELEGRAM_BOT_TOKEN") || "");
+export const initTelegram = async (token: string) => {
+  const bot = new Bot(token);
 
-bot.command("start", (ctx) => ctx.reply("Welcome! Up and running."));
-bot.command("ping", (ctx) => ctx.reply(`Pong! ${new Date()} ${Date.now()}`));
+  bot.command("start", (ctx) => ctx.reply("Welcome! Up and running."));
+  bot.command("ping", (ctx) => ctx.reply(`Pong! ${new Date()} ${Date.now()}`));
 
-const handleUpdate = webhookCallback(bot, "std/http");
+  return bot;
+};
 
-const telegramHandler = async (context: any) => {
+const telegramHandler = async (
+  context: any,
+  bot: Bot,
+  halfleapToken: string,
+) => {
+  const handleUpdate = webhookCallback(bot, "std/http");
+
   try {
-    if (
-      context.request.url.searchParams.get("secret") !==
-        Deno.env.get("FUNCTION_SECRET")
-    ) {
+    if (context.request.url.searchParams.get("secret") !== halfleapToken) {
       context.response.status = 405;
       context.response.body = "not allowed";
-    } else {
-      context.response = await handleUpdate(context.request);
+      return;
     }
+
+    context.response = await handleUpdate(context.request);
   } catch (err) {
     console.error(err);
   }
