@@ -1,37 +1,45 @@
 import { Bot, webhookCallback } from "https://deno.land/x/grammy@v1.8.3/mod.ts";
 
-export const initTelegram = async (token: string) => {
-  console.log("Initializing telegram bot: ", token);
-  const bot = new Bot(token);
+import { Context } from "../../deps/deps.ts";
+import { AdapterID, Event, Listener, Publisher } from "./generic.ts";
 
-  bot.command("start", (ctx) => ctx.reply("Welcome! Up and running."));
-  bot.command("ping", (ctx) => ctx.reply(`Pong! ${new Date()} ${Date.now()}`));
+const Telegram: AdapterID = "telegram";
 
-  return bot;
-};
+export default class TelegramAdapter implements Listener, Publisher {
+  bot: Bot;
+  handleUpdate: (ctx: Context) => Promise<void>;
 
-const telegramHandler = async (
-  context: any,
-  bot: Bot,
-  halfleapToken: string,
-) => {
-  const handleUpdate = webhookCallback(bot);
+  constructor(token: string) {
+    this.bot = new Bot(token);
+    this.handleUpdate = webhookCallback(this.bot);
 
-  console.log("Handler executing");
-  try {
-    if (context.request.url.searchParams.get("secret") !== halfleapToken) {
-      context.response.status = 405;
-      context.response.body = "not allowed";
-      console.warn("Not allowed");
-      return;
-    }
-
-    console.log("Handling update");
-    console.log(await context.request.body({ type: "json" }).value);
-    await handleUpdate(context);
-  } catch (err) {
-    console.error(err);
+    // Commands
+    this.bot.command("start", (ctx) => ctx.reply("Welcome! Up and running."));
+    this.bot.command(
+      "ping",
+      (ctx) => ctx.reply(`Pong! ${new Date()} ${Date.now()}`),
+    );
   }
-};
 
-export default telegramHandler;
+  GetType(): AdapterID {
+    return Telegram;
+  }
+
+  async handle(ctx: Context): Promise<Event> {
+    const body = await ctx.request.body({ type: "json" }).value;
+    console.log(body);
+
+    return Promise.resolve({
+      ID: "123",
+      Source: Telegram,
+      Timestamp: new Date(),
+      Location: { Latitude: 0, Longitude: 0 },
+      Data: "Hello",
+      response: () => this.handleUpdate(ctx),
+    });
+  }
+
+  async publish(event: Event, conn: any): Promise<void> {
+    // Send the event to the telegram API
+  }
+}
