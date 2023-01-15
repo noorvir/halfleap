@@ -21,12 +21,15 @@ const router = new Router();
 //  -
 
 // add secret to authenticate webhook
+// - each adapter gets it's own token
 
 router
   .get("/", (context) => {
     context.response.body = "Hello, World!";
   })
-  .get("/telegram", (context) => {
+  .post("/telegram", (context) => {
+    console.log("Executing telegram webhook");
+
     return initTelegram(TELEGRAM_BOT_TOKEN).then((bot) =>
       telegramHandler(context, bot, HALFLEAP_API_TOKEN)
     );
@@ -40,4 +43,5 @@ const app = new Application();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
+console.log("Starting server at http://localhost:8000");
 await app.listen({ port: 8000 });
