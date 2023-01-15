@@ -2,6 +2,7 @@ import { Router } from "../deps/deps.ts";
 import TelegramAdapter from "../adapters/interface/telegram.ts";
 
 import { TELEGRAM_BOT_TOKEN } from "./constants.ts";
+import supabase from "./db.ts";
 
 const router = new Router();
 const telegramAdapter = new TelegramAdapter(TELEGRAM_BOT_TOKEN);
