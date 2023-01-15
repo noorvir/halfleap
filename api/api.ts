@@ -1,7 +1,8 @@
-import { Application, Middleware } from "../deps/deps.ts";
+import { Application, createClient, Middleware } from "../deps/deps.ts";
 
 import router from "./router.ts";
 import auth from "./auth.ts";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./constants.ts";
 
 // Connect to database
 // Check which adapters are configured
