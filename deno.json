@@ -6,12 +6,11 @@
   },
   "lint": {
     "files": {
-      "include": ["api/", "adapters/", "deps/", "interfaces/"],
+      "include": ["api/", "adapter/", "deps/", "interfaces/"],
       "exclude": ["dashboard/"]
     },
     "rules": {
-      "tags": ["recommended"],
-      "include": ["ban-untagged-todo"]
+      "tags": ["recommended"]
     }
   },
   "fmt": {

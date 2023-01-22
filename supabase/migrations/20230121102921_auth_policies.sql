@@ -13,6 +13,13 @@ alter table halfleap.notes
     enable row level security;
 alter table halfleap.resources
     enable row level security;
+alter table halfleap.shared_resources
+    enable row level security;
+alter table halfleap.shared_notes
+    enable row level security;
+alter table halfleap.shared_locations
+    enable row level security;
+
 
 -- Policies
 
