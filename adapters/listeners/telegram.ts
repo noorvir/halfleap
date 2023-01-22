@@ -1,9 +1,15 @@
 import { Bot, webhookCallback } from "https://deno.land/x/grammy@v1.8.3/mod.ts";
 
 import { Context } from "../../deps/deps.ts";
-import { AdapterID, Event, Listener, Publisher } from "./generic.ts";
+import {
+  AdapterID,
+  EventT,
+  Listener,
+  ListenerResponseT,
+  Publisher,
+} from "../../interfaces/adapter.ts";
 
-const Telegram: AdapterID = "telegram";
+const TELEGRAM: AdapterID = "telegram";
 
 export default class TelegramAdapter implements Listener, Publisher {
   bot: Bot;
@@ -20,25 +26,29 @@ export default class TelegramAdapter implements Listener, Publisher {
     );
   }
 
-  GetType(): AdapterID {
-    return Telegram;
+  GetID(): AdapterID {
+    return TELEGRAM;
   }
 
-  async handle(ctx: Context): Promise<Event> {
+  async handle(ctx: Context): Promise<ListenerResponseT> {
     const body = await ctx.request.body({ type: "json" }).value;
     console.log(body);
 
-    return Promise.resolve({
-      ID: "123",
-      Source: Telegram,
-      Timestamp: new Date(),
-      Location: { Latitude: 0, Longitude: 0 },
-      Data: "Hello",
+    return {
+      event: {
+        created_at: (new Date()).toDateString(),
+        id: 1,
+        data: {},
+        eid: "",
+        type: "ingress",
+        source: TELEGRAM,
+      },
       response: () => this.handleUpdate(ctx),
-    });
+    };
   }
 
-  async publish(event: Event, conn: any): Promise<void> {
+  async publish(event: EventT, conn: any): Promise<void> {
     // Send the event to the telegram API
+    return Promise.resolve();
   }
 }

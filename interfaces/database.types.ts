@@ -32,6 +32,7 @@ export interface Database {
           created_at: string;
           disambiguation: string | null;
           email: string;
+          event_id: string | null;
           first_name: string;
           id: string;
           is_me: boolean;
@@ -45,6 +46,7 @@ export interface Database {
           created_at?: string;
           disambiguation?: string | null;
           email: string;
+          event_id?: string | null;
           first_name: string;
           id?: string;
           is_me?: boolean;
@@ -58,6 +60,7 @@ export interface Database {
           created_at?: string;
           disambiguation?: string | null;
           email?: string;
+          event_id?: string | null;
           first_name?: string;
           id?: string;
           is_me?: boolean;
@@ -70,41 +73,47 @@ export interface Database {
       events: {
         Row: {
           created_at: string;
+          data: Json;
+          eid: string | null;
           id: number;
-          message: string;
           source: string;
-          url: string;
+          type: Database["halfleap"]["Enums"]["event_type"];
         };
         Insert: {
           created_at?: string;
-          id?: number;
-          message: string;
+          data: Json;
+          eid?: string | null;
+          id?: never;
           source: string;
-          url: string;
+          type: Database["halfleap"]["Enums"]["event_type"];
         };
         Update: {
           created_at?: string;
-          id?: number;
-          message?: string;
+          data?: Json;
+          eid?: string | null;
+          id?: never;
           source?: string;
-          url?: string;
+          type?: Database["halfleap"]["Enums"]["event_type"];
         };
       };
       locations: {
         Row: {
           coordinates: unknown;
+          event_id: string;
           id: string;
           is_exact: boolean;
           is_private: boolean;
         };
         Insert: {
           coordinates: unknown;
+          event_id: string;
           id?: string;
           is_exact: boolean;
           is_private?: boolean;
         };
         Update: {
           coordinates?: unknown;
+          event_id?: string;
           id?: string;
           is_exact?: boolean;
           is_private?: boolean;
@@ -114,6 +123,7 @@ export interface Database {
         Row: {
           content: string;
           created_at: string;
+          event_id: string | null;
           id: string;
           is_private: boolean;
           updated_at: string;
@@ -121,6 +131,7 @@ export interface Database {
         Insert: {
           content?: string;
           created_at?: string;
+          event_id?: string | null;
           id?: string;
           is_private?: boolean;
           updated_at?: string;
@@ -128,6 +139,7 @@ export interface Database {
         Update: {
           content?: string;
           created_at?: string;
+          event_id?: string | null;
           id?: string;
           is_private?: boolean;
           updated_at?: string;
@@ -136,6 +148,7 @@ export interface Database {
       resources: {
         Row: {
           created_at: string;
+          event_id: string | null;
           id: string;
           is_private: boolean;
           updated_at: string;
@@ -143,6 +156,7 @@ export interface Database {
         };
         Insert: {
           created_at?: string;
+          event_id?: string | null;
           id?: string;
           is_private?: boolean;
           updated_at?: string;
@@ -150,6 +164,7 @@ export interface Database {
         };
         Update: {
           created_at?: string;
+          event_id?: string | null;
           id?: string;
           is_private?: boolean;
           updated_at?: string;
@@ -206,7 +221,7 @@ export interface Database {
       [_ in never]: never;
     };
     Enums: {
-      [_ in never]: never;
+      event_type: "ingress" | "transform" | "publish";
     };
   };
 }

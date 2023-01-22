@@ -10,7 +10,7 @@ create table halfleap.adapters
 (
     id       uuid primary key     default gen_random_uuid(),
     name     text unique not null,
-    added_at timestamptz not null default now()
+    added_at timestamptz not null default now(),
 );
 
 create type halfleap.event_type as enum ('ingress', 'transform', 'publish');

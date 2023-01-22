@@ -1,8 +1,8 @@
-import { Application, createClient, Middleware } from "../deps/deps.ts";
+import { Application, createClient, Middleware } from '../deps/deps.ts';
 
-import router from "./router.ts";
-import auth from "./auth.ts";
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./constants.ts";
+import router from './router.ts';
+import auth from './auth.ts';
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from './constants.ts';
 
 // Connect to database
 // Check which adapters are configured
@@ -26,8 +26,8 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./constants.ts";
 const app = new Application();
 
 const logger: Middleware = (ctx, next) => {
-  console.log(`Received ${ctx.request.url} at ${new Date()}`);
-  return next();
+	console.log(`Received ${ctx.request.url} at ${new Date()}`);
+	return next();
 };
 
 app.use(logger);
@@ -35,5 +35,5 @@ app.use(auth);
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-console.log("Starting server at http://localhost:8000");
+console.log('Starting server at http://localhost:8000');
 await app.listen({ port: 8000 });
