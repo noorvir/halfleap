@@ -1,7 +1,7 @@
 import { Application, Middleware } from '../deps/deps.ts';
 
 import router from './router.ts';
-import auth from './auth.ts';
+import { withAuthorizedListener } from './middleware.ts';
 
 // Connect to database
 // Check which adapters are configured
@@ -30,7 +30,7 @@ const logger: Middleware = (ctx, next) => {
 };
 
 app.use(logger);
-app.use(auth);
+app.use(withAuthorizedListener);
 app.use(router.routes());
 app.use(router.allowedMethods());
 

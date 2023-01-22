@@ -1,20 +1,10 @@
 import { Router } from '../deps/deps.ts';
-import TelegramAdapter from '../adapters/listeners/telegram.ts';
-
-import { TELEGRAM_BOT_TOKEN } from './constants.ts';
 import { supabaseAdmin } from './supabase.ts';
-import {
-	EventT,
-	Listener,
-	ListenerResponseT,
-	Publisher,
-	Transformer,
-} from '../interfaces/adapter.ts';
+import { EventT, ListenerResponseT, Publisher, Transformer } from '../interfaces/adapter.ts';
+import { initListener } from './middleware.ts';
 
 const router = new Router();
-const telegramAdapter = new TelegramAdapter(TELEGRAM_BOT_TOKEN);
 
-const listeners: Listener[] = [telegramAdapter];
 const transforms: Transformer[] = [];
 const publishers: Publisher[] = [];
 
@@ -32,59 +22,51 @@ router
 		context.response.body = { name: 'John Doe' };
 	});
 
-for (const listener of listeners) {
-	router.post(`/listen/${listener.GetID()}`, async (context) => {
-		console.log(`Executing ${listener.GetID()} listener`);
+router.post(`/listen/:listener`, async (ctx) => {
+	const listener = await initListener(ctx.params.listener);
+	// This should be caught by the middleware so this should never happen, but just in case
+	if (!listener) {
+		ctx.response.status = 400;
+		return;
+	}
 
-		// TODO: Authorize the request the user
-		let event: EventT;
-		let res: ListenerResponseT;
+	let event: EventT;
+	let res: ListenerResponseT;
 
-		try {
-			res = await listener.handle(context);
-			const adapterID = await supabaseAdmin.from('adapters').select('id').eq(
-				'name',
-				listener.GetID(),
-			).then((r) => {
-				if (r.error) {
-					throw r.error;
-				}
-				return r.data[0].id;
-			});
+	try {
+		res = await listener.handle(ctx);
+		event = await supabaseAdmin.from('events').insert({
+			data: res.data,
+			source: listener.id,
+			type: 'ingress',
+		}).select('*').then((res): EventT => {
+			if (res.error) {
+				throw new Error(res.error.message);
+			}
+			return {
+				...res!.data[0],
+			};
+		});
+	} catch (e) {
+		console.log(e);
+		// TODO: add error response to listener
+		return ctx.response.status = 500;
+	}
 
-			event = await supabaseAdmin.from('events').insert({
-				data: res.data,
-				source: adapterID,
-				type: 'ingress',
-			}).select('*').then((res): EventT => {
-				if (res.error) {
-					throw new Error(res.error.message);
-				}
-				return {
-					...res!.data[0],
-				};
-			});
-		} catch (e) {
-			console.log(e);
-			// TODO: add error response to listener
-			return context.response.status = 500;
-		}
+	for (const transformer of transforms) {
+		await transformer.handleEvent(event, supabaseAdmin);
+	}
+	for (const publisher of publishers) {
+		await publisher.publish(event, supabaseAdmin);
+	}
 
-		for (const transformer of transforms) {
-			await transformer.handleEvent(event, supabaseAdmin);
-		}
-		for (const publisher of publishers) {
-			await publisher.publish(event, supabaseAdmin);
-		}
+	// Every listener can optionally respond to the request
+	if (res.response) {
+		return res.response();
+	}
 
-		// Every listener can optionally respond to the request
-		if (res.response) {
-			return res.response();
-		}
-
-		context.response.status = 200;
-		context.response.body = 'ok';
-	});
-}
+	ctx.response.status = 200;
+	ctx.response.body = 'ok';
+});
 
 export default router;
