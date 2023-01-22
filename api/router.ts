@@ -43,8 +43,8 @@ for (const listener of listeners) {
 		try {
 			res = await listener.handle(context);
 			event = await supabaseAdmin.from('events').insert({
-				data: res.event.data,
-				source: res.event.source,
+				data: res.data,
+				source: listener.GetID(),
 				type: 'ingress',
 			}).select('*').then((res): EventT => {
 				if (res.error) {
