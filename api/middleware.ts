@@ -75,7 +75,7 @@ export const withAuthorizedListener: Middleware = async (ctx: Context, next) => 
 		return;
 	}
 
-	const authenticator = listener.parseAuthenticator(ctx);
+	const authenticator = await listener.parseAuthenticator(ctx);
 	if (!authenticator || authenticator == '') {
 		ctx.response.status = 401;
 		ctx.response.body = 'Unauthorized';
@@ -83,7 +83,7 @@ export const withAuthorizedListener: Middleware = async (ctx: Context, next) => 
 	}
 
 	// TODO: fetch adapter config and check to see if the authenticator is authorized
-	if (authenticator === 'anoorvir') {
+	if (authenticator === '582049053') {
 		return next();
 	}
 	ctx.response.status = 403;

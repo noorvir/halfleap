@@ -1,6 +1,4 @@
-import { Bot, webhookCallback } from 'https://deno.land/x/grammy@v1.8.3/mod.ts';
-
-import { Context } from '../../deps/deps.ts';
+import { Bot, Context, TelegramUpdate, webhookCallback } from '../../deps/deps.ts';
 import { EventT, Listener, ListenerResponseT, Publisher } from '../../interfaces/adapter.ts';
 
 const TELEGRAM = 'telegram';
@@ -30,9 +28,9 @@ export default class TelegramAdapter implements Listener, Publisher {
 		return TELEGRAM;
 	}
 
-	parseAuthenticator(ctx: Context): string {
-		// parse the quest body to fetch the userID of the user making the request
-		return 'anoorvir';
+	async parseAuthenticator(ctx: Context): Promise<string> {
+		const body: TelegramUpdate = await ctx.request.body({ type: 'json' }).value;
+		return body.message?.from?.id?.toString() || '';
 	}
 
 	async handle(ctx: Context): Promise<ListenerResponseT> {

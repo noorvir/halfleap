@@ -25,7 +25,7 @@ export interface Listener extends Adapter {
 	 */
 	id: string;
 	handle(ctx: Context): Promise<ListenerResponseT>;
-	parseAuthenticator(ctx: Context): string;
+	 parseAuthenticator(ctx: Context): Promise<string>;
 }
 
 export interface Transformer {
