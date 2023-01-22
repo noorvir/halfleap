@@ -17,14 +17,22 @@ const getListenerNameFromURL = (pathname: string) => {
 };
 
 export const initListener = async (name: string): Promise<Listener | null> => {
-	const adapterID = await supabaseAdmin.from('adapters').select('id').eq('name', name).then(
-		(r) => {
-			if (r.error) {
-				throw r.error;
-			}
-			return r.data[0].id;
-		},
-	);
+	const adapterID = await supabaseAdmin.from('adapters').select('id').eq('name', name)
+		.then(
+			({ data, error }) => {
+				if (error) {
+					throw error;
+				}
+				if (data && data.length > 0) {
+					return data[0].id;
+				}
+				return null;
+			},
+		);
+
+	if (!adapterID) {
+		return null;
+	}
 
 	switch (name) {
 		case 'telegram':
@@ -61,9 +69,9 @@ export const withAuthorizedListener: Middleware = async (ctx: Context, next) => 
 
 	const listener = await initListener(name);
 	if (!listener) {
-		ctx.response.status = 400;
-		ctx.response.body = 'not allowed';
-		console.warn('Not allowed');
+		ctx.response.status = 404;
+		ctx.response.body = `Listener "${name}" not found`;
+		console.warn(`Listener "${name}" not found`);
 		return;
 	}
 
