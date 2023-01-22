@@ -7,15 +7,15 @@ export type EventTypesT = Database['halfleap']['Enums']['event_type'];
 
 interface Adapter {
 	getID(): string;
+
 	getName(): string;
 }
 
-type ResponseFunction = () => Promise<void>;
+export type ResponseFunction = (msg: string) => Promise<any>;
 
 export type ListenerResponseT = {
 	data: EventT['data'];
 	response?: ResponseFunction;
-	errorResponse?: ResponseFunction;
 };
 
 export interface Listener extends Adapter {
@@ -24,8 +24,12 @@ export interface Listener extends Adapter {
 	 *  ID of the adapter in the db. This is specific to the user.
 	 */
 	id: string;
+
 	handle(ctx: Context): Promise<ListenerResponseT>;
-	 parseAuthenticator(ctx: Context): Promise<string>;
+
+	respond(ctx: Context,response: string): Promise<any>;
+
+	parseAuthenticator(ctx: Context): Promise<string | ResponseFunction>;
 }
 
 export interface Transformer {

@@ -62,7 +62,7 @@ router.post(`/listen/:listener`, async (ctx) => {
 
 	// Every listener can optionally respond to the request
 	if (res.response) {
-		return res.response();
+		return res.response(`ack: \n\tevent: ${event.id}\n\tmsg: ${event.data}`);
 	}
 
 	ctx.response.status = 200;

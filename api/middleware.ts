@@ -79,7 +79,6 @@ export const withAuthorizedListener: Middleware = async (ctx: Context, next) => 
 	if (!authenticator || authenticator == '') {
 		ctx.response.status = 401;
 		ctx.response.body = 'Unauthorized';
-		return;
 	}
 
 	// TODO: fetch adapter config and check to see if the authenticator is authorized
@@ -89,4 +88,5 @@ export const withAuthorizedListener: Middleware = async (ctx: Context, next) => 
 	ctx.response.status = 403;
 	ctx.response.body = 'Forbidden';
 	console.warn(`Authenticator ${authenticator} is forbidden from accessing this route`);
+	return listener.respond(ctx, 'You\'re not allowed to access this route');
 };
