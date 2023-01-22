@@ -42,9 +42,19 @@ for (const listener of listeners) {
 
 		try {
 			res = await listener.handle(context);
+			const adapterID = await supabaseAdmin.from('adapters').select('id').eq(
+				'name',
+				listener.GetID(),
+			).then((r) => {
+				if (r.error) {
+					throw r.error;
+				}
+				return r.data[0].id;
+			});
+
 			event = await supabaseAdmin.from('events').insert({
 				data: res.data,
-				source: listener.GetID(),
+				source: adapterID,
 				type: 'ingress',
 			}).select('*').then((res): EventT => {
 				if (res.error) {

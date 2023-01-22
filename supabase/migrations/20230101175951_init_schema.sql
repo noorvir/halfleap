@@ -4,7 +4,8 @@
 create schema if not exists halfleap;
 
 -- Finer-grained permissions for the halfleap schema are set below.
-grant usage on schema halfleap to authenticated;
+grant usage on schema halfleap to authenticated, postgres, service_role;
+alter default privileges in schema halfleap grant select, insert, update, delete on  tables to postgres, service_role;
 
 create table halfleap.adapters
 (
