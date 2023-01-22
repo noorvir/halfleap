@@ -29,18 +29,28 @@ export default class TelegramAdapter implements Listener, Publisher {
 	}
 
 	async parseAuthenticator(ctx: Context): Promise<string> {
-		const body: TelegramUpdate = await ctx.request.body({ type: 'json' }).value;
-		return body.message?.from?.id?.toString() || '';
+		try {
+			const body: TelegramUpdate = await ctx.request.body({ type: 'json' })?.value;
+			return body.message?.from?.id?.toString() || '';
+		} catch (e) {
+			return '';
+		}
 	}
 
 	async handle(ctx: Context): Promise<ListenerResponseT> {
-		const body = await ctx.request.body({ type: 'json' }).value;
-		console.log(body);
-
-		return {
-			data: { 'hello': 'world' },
-			response: () => this.handleUpdate(ctx),
-		};
+		try {
+			const body = await ctx.request.body({ type: 'json' }).value;
+			const text = body.message?.text || '';
+			console.log(body);
+			return {
+				data: text,
+				response: () => this.handleUpdate(ctx),
+			};
+		} catch (e) {
+			console.log(e);
+			// TODO: return error response handler
+			throw e;
+		}
 	}
 
 	async publish(event: EventT, conn: any): Promise<void> {
