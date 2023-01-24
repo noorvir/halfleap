@@ -8,12 +8,6 @@ const router = new Router();
 const transforms: Transformer[] = [];
 const publishers: Publisher[] = [];
 
-// parse the telegram specific userid from the request
-// ensure the correct user is sending the request
-// use the adapter to parse the request
-// store the parsed event in the database
-// execute next adapter
-
 router
 	.get('/', (context) => {
 		context.response.body = 'Hello, World!';
@@ -62,7 +56,7 @@ router.post(`/listen/:listener`, async (ctx) => {
 
 	// Every listener can optionally respond to the request
 	if (res.response) {
-		return res.response(`ack: \n\tevent: ${event.id}\n\tmsg: ${event.data}`);
+		return res.response(`ack: \n\tevent-id: ${event.id}\n\tmessage: ${event.data}`);
 	}
 
 	ctx.response.status = 200;

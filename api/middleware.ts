@@ -75,18 +75,20 @@ export const withAuthorizedListener: Middleware = async (ctx: Context, next) => 
 		return;
 	}
 
-	const authenticator = await listener.parseAuthenticator(ctx);
-	if (!authenticator || authenticator == '') {
+	const authID = await listener.parseAuthenticator(ctx);
+	if (!authID || authID == '') {
 		ctx.response.status = 401;
 		ctx.response.body = 'Unauthorized';
 	}
 
-	// TODO: fetch adapter config and check to see if the authenticator is authorized
-	if (authenticator === '582049053') {
+	const authenticator = await supabaseAdmin.from('authenticators').select().eq('auth_id', authID)
+		.eq('is_allowed', true);
+
+	if (authenticator) {
 		return next();
 	}
 	ctx.response.status = 403;
 	ctx.response.body = 'Forbidden';
-	console.warn(`Authenticator ${authenticator} is forbidden from accessing this route`);
+	console.warn(`Authenticator ${authID} is forbidden from accessing this route`);
 	return listener.respond(ctx, 'You\'re not allowed to access this route');
 };

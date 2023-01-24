@@ -13,6 +13,9 @@ export default class TelegramAdapter implements Listener, Publisher {
 	id: string;
 	bot: Bot;
 	chat_id: string;
+	// We shouldn't need to call this but I haven't figured out how to do accept messages on the
+	// Telegram webhook properly yet. Calling handle update handles sending an OK status to Telegram
+	// so it doesn't keep resending us updates.
 	handleUpdate: (ctx: Context) => Promise<void>;
 
 	constructor(id: string, token: string) {

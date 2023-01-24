@@ -3,25 +3,6 @@ import { Application, Middleware } from '../deps/deps.ts';
 import router from './router.ts';
 import { withAuthorizedListener } from './middleware.ts';
 
-// Connect to database
-// Check which adapters are configured
-// Load those adapters
-
-// Request:
-//  - check RLS policy for user
-
-// for each adapter, get the required metadata
-
-// request from ingress adapters
-// - verify if the *adapter* sending the request is authenticated and authorized.
-// - authenticate the *request* (who sent it using the adapter)
-//  -
-//  -
-
-// add secret to authenticate webhook
-// - each adapter gets it's own token
-// - in
-
 const app = new Application();
 
 const logger: Middleware = (ctx, next) => {
