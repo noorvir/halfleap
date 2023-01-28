@@ -13,4 +13,11 @@ async function loginWithGitHub() {
   });
 }
 
+async function signInWithPassword(email: string, password: string) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+}
+
 export { loginWithGitHub, logout };

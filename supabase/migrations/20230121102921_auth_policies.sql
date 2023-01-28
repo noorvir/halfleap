@@ -23,6 +23,40 @@ alter table halfleap.shared_locations
 
 -- Policies
 
+-- Give user full access on all of their own data (except for events).
+create policy "Allow the account owner full access to their adapters" on halfleap.adapters
+    for all
+    using (auth.uid() = (select id
+                         from halfleap.contacts
+                         where is_me = true));
+
+create policy "Allow the account owner full access to their contacts" on halfleap.contacts
+    for all
+    using (auth.uid() = (select id
+                         from halfleap.contacts
+                         where is_me = true));
+
+create policy "Allow the account owner full access to their locations" on halfleap.locations
+    for all
+    using (auth.uid() = (select id
+                         from halfleap.contacts
+                         where is_me = true));
+
+create policy "Allow the account owner full access to their notes" on halfleap.notes
+    for all
+    using (auth.uid() = (select id
+                         from halfleap.contacts
+                         where is_me = true));
+
+create policy "Allow the account owner full access to their resources" on halfleap.resources
+    for all
+    using (auth.uid() = (select id
+                         from halfleap.contacts
+                         where is_me = true));
+
+
+-- Add permissions for public and shared data
+
 create policy "Enable open access to public locations" on halfleap.locations
     for select
     using (is_private = false);
@@ -57,32 +91,3 @@ create policy "Enable contacts to see resources shared with them" on halfleap.re
                                          on shared_locations.contact_id = contacts.id));
 
 
-create policy "Allow the account owner full access to their adapters" on halfleap.adapters
-    for all
-    using (auth.uid() = (select id
-                         from halfleap.contacts
-                         where is_me = true));
-
-create policy "Allow the account owner full access to their contacts" on halfleap.contacts
-    for all
-    using (auth.uid() = (select id
-                         from halfleap.contacts
-                         where is_me = true));
-
-create policy "Allow the account owner full access to their locations" on halfleap.locations
-    for all
-    using (auth.uid() = (select id
-                         from halfleap.contacts
-                         where is_me = true));
-
-create policy "Allow the account owner full access to their notes" on halfleap.notes
-    for all
-    using (auth.uid() = (select id
-                         from halfleap.contacts
-                         where is_me = true));
-
-create policy "Allow the account owner full access to their resources" on halfleap.resources
-    for all
-    using (auth.uid() = (select id
-                         from halfleap.contacts
-                         where is_me = true));

@@ -4,8 +4,8 @@
 create schema if not exists halfleap;
 
 -- Finer-grained permissions for the halfleap schema are set below.
-grant usage on schema halfleap to authenticated, postgres, service_role;
-alter default privileges in schema halfleap grant select, insert, update, delete on tables to postgres, service_role;
+grant usage on schema halfleap to authenticated, postgres, service_role, supabase_auth_admin;
+alter default privileges in schema halfleap grant select, insert, update, delete on tables to authenticated, postgres, service_role, supabase_auth_admin;
 
 
 create table halfleap.adapters
@@ -121,7 +121,8 @@ begin
 end;
 $$ language plpgsql;
 comment on function halfleap.create_new_contact is
-    'Creates a new event, authenticator and contact when a new auth user is created.';
+    'Creates a new event, authenticator and contact when a new auth user is created.
+    This only works for providers that provide the full_name field in the raw_user_meta_data.';
 
 create trigger on_auth_user_created
     after insert

@@ -1,6 +1,6 @@
-import { SessionContextProvider, useSession } from '@supabase/auth-helpers-react';
-import type { AppProps } from 'next/app';
-import { useRouter } from 'next/router';
+import {SessionContextProvider, useSession} from '@supabase/auth-helpers-react';
+import type {AppProps} from 'next/app';
+import {useRouter} from 'next/router';
 
 import supabase from 'lib/supabase';
 

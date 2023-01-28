@@ -2,19 +2,17 @@ import { Router } from '../deps/deps.ts';
 import { supabaseAdmin } from './supabase.ts';
 import { EventT, ListenerResponseT, Publisher, Transformer } from '../interfaces/adapter.ts';
 import { initListener } from './middleware.ts';
+import { genesis } from './admin.ts';
 
 const router = new Router();
 
 const transforms: Transformer[] = [];
 const publishers: Publisher[] = [];
 
-router
-	.get('/', (context) => {
-		context.response.body = 'Hello, World!';
-	})
-	.get('/users/:id', (context) => {
-		context.response.body = { name: 'John Doe' };
-	});
+/**
+ * A one off route to create the admin user
+ */
+router.post('/genesis', genesis);
 
 router.post(`/listen/:listener`, async (ctx) => {
 	const listener = await initListener(ctx.params.listener);
