@@ -7,8 +7,11 @@ module.exports = {
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
   // eslint-disable-next-line global-require
-  plugins: [
-    require('prettier-plugin-tailwindcss'),
-    require('@trivago/prettier-plugin-sort-imports'),
-  ],
+  plugins: ['@trivago/prettier-plugin-sort-imports', 'prettier-plugin-tailwindcss'],
+  pluginSearchDirs: false,
+  overrides: [
+    {
+      files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json"],
+    }
+  ]
 };

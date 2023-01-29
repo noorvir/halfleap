@@ -23,7 +23,7 @@ const Account: React.FC<Props> = ({ user }) => {
 
   return (
     <Menu className="relative" as={'div'}>
-      <Menu.Button className="h-10 w-10 rounded-full bg-primary-blue flex items-center justify-center overflow-hidden">
+      <Menu.Button className="bg-primary-blue flex h-10 w-10 items-center justify-center overflow-hidden rounded-full">
         <Image src={user.user_metadata.avatar_url} width={40} height={40} alt="avatar" />
       </Menu.Button>
       <Transition
@@ -35,10 +35,10 @@ const Account: React.FC<Props> = ({ user }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute flex flex-col right-0 p-4 bg-system-grey6 space-y-5 mt-3 rounded-lg">
+        <Menu.Items className="absolute right-0 mt-3 flex flex-col space-y-5 rounded-lg bg-system-grey6 p-4">
           <Link
             href={'/'}
-            className="text-primary-white hover:text-system-grey4 transition-colors"
+            className="text-primary-white transition-colors hover:text-system-grey4"
           >
             <Text variant="body" className="flex items-center">
               <FiFile size={16} className="mr-2" />
@@ -47,7 +47,7 @@ const Account: React.FC<Props> = ({ user }) => {
           </Link>
           <Link
             href={'/settings'}
-            className="text-primary-white hover:text-system-grey4 transition-colors"
+            className="text-primary-white transition-colors hover:text-system-grey4"
           >
             <Text variant="body" className="flex items-center">
               <FiUser size={16} className="mr-2" />
@@ -83,9 +83,9 @@ function NavigationBar(props: NavBarProps) {
 
   return (
     <div
-      className={`w-full h-16 fixed top-0 bg-primary-black left-0 right-0 flex items-center justify-between text-primary-white border-b border-system-grey6 z-100 px-3 ${props.className}`}
+      className={`z-100 fixed top-0 left-0 right-0 flex h-16 w-full items-center justify-between border-b border-system-grey6 bg-primary-black px-3 text-primary-white ${props.className}`}
     >
-      <div className="space-x-6 flex items-center">
+      <div className="flex items-center space-x-6">
         <Link href="/">
           <Image
             className="h-10"
@@ -98,7 +98,7 @@ function NavigationBar(props: NavBarProps) {
         {breadcrumbs || null}
       </div>
 
-      <div className="space-x-8 flex items-center">
+      <div className="flex items-center space-x-8">
         <Account user={user} />
       </div>
     </div>

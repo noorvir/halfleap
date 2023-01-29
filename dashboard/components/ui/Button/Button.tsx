@@ -24,7 +24,7 @@ const getType = (type: string) => {
     }
     default: {
       // primary
-      return ``;
+      return `bg-system-grey2`;
     }
   }
 };
@@ -36,18 +36,23 @@ export const Button = ({
   disabled = false,
   ...props
 }: ButtonProps) => {
-  const { className, icon, autofocus, ...rest } = props;
+  const { icon, autofocus, ...rest } = props;
   // Double negation is needed to prevent Type 'unknown' is not assignable to boolean type error
   const autoFocus = !!autofocus;
 
   const iconBase = `inline ${variant === 'large' ? 'h-5 w-5' : 'h-3.33 w-3.33 '} mr-2.33`;
-  const base = `inline-flex items-center font-inter justify-center rounded-default min-w-fit whitespace-nowrap min-w-fit transition-colors`;
 
-  const classes = `${base} ${className} ${getVariant(variant)} ${getType(type)}`;
   const Icon = icon;
 
   return (
-    <BaseButton autofocus={autoFocus} className={classes} disabled={disabled} {...rest}>
+    <BaseButton
+      autofocus={autoFocus}
+      className={`font-inter rounded-default inline-flex min-w-fit min-w-fit items-center justify-center whitespace-nowrap rounded-lg transition-colors ${getVariant(
+        variant
+      )} ${getType(type)}`}
+      disabled={disabled}
+      {...rest}
+    >
       <span className={`flex items-center ${loading ? 'invisible' : 'block'}`}>
         {Icon && <Icon className={iconBase} />}
         {props.children}
@@ -55,7 +60,7 @@ export const Button = ({
       {loading ? (
         <span
           style={{ borderTopColor: 'transparent' }}
-          className={'absolute border-solid rounded-full animate-spin w-4 h-4 border-2'}
+          className={'absolute h-4 w-4 animate-spin rounded-full border-2 border-solid'}
         />
       ) : (
         ''

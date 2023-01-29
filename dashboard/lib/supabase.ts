@@ -1,9 +1,9 @@
-import {createClient} from "@supabase/supabase-js";
-import {SUPABASE_URL, SUPABASE_ANON_KEY} from "./constants";
+import { createClient } from '@supabase/supabase-js';
+
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from './constants';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  db: { schema: "public" },
-})
-
+  db: { schema: 'public' },
+});
 
 export default supabase;

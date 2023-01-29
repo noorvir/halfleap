@@ -13,7 +13,7 @@ export default function Heading(props: HeadingProps) {
     case 'h2':
       return (
         <h2
-          className={`text-h2 font-semibold tracking-h2 font-manrope ${className}`}
+          className={`text-h2 tracking-h2 font-manrope font-semibold ${className}`}
           {...rest}
         >
           {props.children}
@@ -22,7 +22,7 @@ export default function Heading(props: HeadingProps) {
     case 'h3':
       return (
         <h3
-          className={`text-h3 font-normal tracking-h3 font-manrope ${className}`}
+          className={`text-h3 tracking-h3 font-manrope font-normal ${className}`}
           {...rest}
         >
           {props.children}
@@ -40,7 +40,7 @@ export default function Heading(props: HeadingProps) {
     case 'h5':
       return (
         <h4
-          className={`text-h5 font-medium tracking-h5 font-manrope ${className}`}
+          className={`text-h5 tracking-h5 font-manrope font-medium ${className}`}
           {...rest}
         >
           {props.children}
@@ -49,7 +49,7 @@ export default function Heading(props: HeadingProps) {
     case 'title':
       return (
         <h5
-          className={`text-title font-normal tracking-title font-inter ${className}`}
+          className={`text-title tracking-title font-inter font-normal ${className}`}
           {...rest}
         >
           {props.children}
@@ -58,7 +58,7 @@ export default function Heading(props: HeadingProps) {
     default:
       // h1
       return (
-        <h1 className={`text-h1 font-semibold font-manrope ${className}`} {...rest}>
+        <h1 className={`text-h1 font-manrope font-semibold ${className}`} {...rest}>
           {props.children}
         </h1>
       );

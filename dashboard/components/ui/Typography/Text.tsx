@@ -13,7 +13,7 @@ export default function Text(props: TextProps) {
     case 'subheader':
       return (
         <p
-          className={`text-subheader font-semibold tracking-subheader font-inter ${className}`}
+          className={`text-subheader tracking-subheader font-inter font-semibold ${className}`}
           {...rest}
         >
           {props.children}
@@ -22,7 +22,7 @@ export default function Text(props: TextProps) {
     case 'caption':
       return (
         <p
-          className={`text-caption font-normal tracking-caption1 font-inter ${className}`}
+          className={`text-caption tracking-caption1 font-inter font-normal ${className}`}
           {...rest}
         >
           {props.children}
@@ -31,7 +31,7 @@ export default function Text(props: TextProps) {
     case 'footnote':
       return (
         <p
-          className={`text-footnote font-normal tracking-footnote font-inter ${className}`}
+          className={`text-footnote tracking-footnote font-inter font-normal ${className}`}
           {...rest}
         >
           {props.children}
@@ -40,7 +40,7 @@ export default function Text(props: TextProps) {
     case 'subtitle':
       return (
         <p
-          className={`text-subtitle font-normal tracking-subtitle font-inter ${className}`}
+          className={`text-subtitle tracking-subtitle font-inter font-normal ${className}`}
           {...rest}
         >
           {props.children}
@@ -50,7 +50,7 @@ export default function Text(props: TextProps) {
       // body
       return (
         <p
-          className={`text-body font-normal tracking-body font-inter ${className}`}
+          className={`text-body tracking-body font-inter font-normal ${className}`}
           {...rest}
         >
           {props.children}

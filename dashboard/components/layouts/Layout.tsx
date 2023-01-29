@@ -4,7 +4,7 @@ import NavigationBar from './NavBar';
 
 function Body(props: any) {
   return (
-    <main className={`layout-body flex-grow p-16 flex flex-col ${props.className || ''}`}>
+    <main className={`layout-body flex flex-grow flex-col p-16 ${props.className || ''}`}>
       {props.children}
     </main>
   );
@@ -14,7 +14,7 @@ function Layout(props: any) {
   return (
     <div
       id={'layout'}
-      className={`layout flex flex-col justify-center bg-primary-black w-full h-full  min-h-screen ${
+      className={`layout flex h-full min-h-screen w-full flex-col ${
         props.className || ''
       }`}
     >
