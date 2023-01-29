@@ -119,7 +119,8 @@ begin
 
     return new;
 end;
-$$ language plpgsql;
+$$ language plpgsql security definer;
+
 comment on function halfleap.create_new_contact is
     'Creates a new event, authenticator and contact when a new auth user is created.
     This only works for providers that provide the full_name field in the raw_user_meta_data.';

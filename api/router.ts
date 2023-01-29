@@ -1,7 +1,7 @@
 import { Router } from '../deps/deps.ts';
 import { supabaseAdmin } from './supabase.ts';
 import { EventT, ListenerResponseT, Publisher, Transformer } from '../interfaces/adapter.ts';
-import { initListener } from './middleware.ts';
+import { initListener, withAuthorizedListener } from './middleware.ts';
 import { genesis } from './admin.ts';
 
 const router = new Router();
@@ -14,6 +14,7 @@ const publishers: Publisher[] = [];
  */
 router.post('/genesis', genesis);
 
+router.use(withAuthorizedListener);
 router.post(`/listen/:listener`, async (ctx) => {
 	const listener = await initListener(ctx.params.listener);
 	// This should be caught by the middleware so this should never happen, but just in case
@@ -40,7 +41,7 @@ router.post(`/listen/:listener`, async (ctx) => {
 			};
 		});
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		// TODO: add error response to listener
 		return ctx.response.status = 500;
 	}

@@ -1,4 +1,4 @@
-import { Application, Middleware } from '../deps/deps.ts';
+import { Application, Middleware, oakCors } from '../deps/deps.ts';
 
 import router from './router.ts';
 import { withAuthorizedListener } from './middleware.ts';
@@ -11,7 +11,7 @@ const logger: Middleware = (ctx, next) => {
 };
 
 app.use(logger);
-app.use(withAuthorizedListener);
+app.use(oakCors({ origin: '*' }));
 app.use(router.routes());
 app.use(router.allowedMethods());
 

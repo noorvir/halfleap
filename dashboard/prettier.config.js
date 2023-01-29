@@ -11,7 +11,7 @@ module.exports = {
   pluginSearchDirs: false,
   overrides: [
     {
-      files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json"],
-    }
-  ]
+      files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx', '**/*.json'],
+    },
+  ],
 };

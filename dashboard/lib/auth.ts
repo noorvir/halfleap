@@ -1,3 +1,6 @@
+import { HALFLEAP_API_URL } from 'lib/constants';
+import { post } from 'lib/fetch';
+
 import supabase from './supabase';
 
 const logout = async () => {
@@ -13,11 +16,15 @@ async function loginWithGitHub() {
   });
 }
 
-async function signInWithPassword(email: string, password: string) {
+async function loginWithPassword(email: string, password: string) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
+
+  if (error) {
+    console.error(error);
+  }
 }
 
-export { loginWithGitHub, logout };
+export { loginWithGitHub, loginWithPassword, logout };

@@ -2,7 +2,8 @@ import { Switch } from '@headlessui/react';
 import React, { useState } from 'react';
 import { FiGithub } from 'react-icons/fi';
 
-import { loginWithGitHub } from 'lib/auth';
+import { loginWithGitHub, loginWithPassword } from 'lib/auth';
+import useCreateAccountMutation from 'lib/hooks/usCreateAccountMutation';
 import supabase from 'lib/supabase';
 
 // import { loginWithGitHub } from 'lib/auth';
@@ -37,7 +38,7 @@ function Toggle({
   );
 }
 
-function Auth() {
+function CreateAccount() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -45,10 +46,7 @@ function Auth() {
   const [isGenesis, setIsGenesis] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async () => {
-    setIsLoading(true);
-    loginWithGitHub();
-  };
+  const { mutate } = useCreateAccountMutation();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -72,72 +70,119 @@ function Auth() {
 
   // TODO: make sure only the admin can login
 
-  const handleGenesis = async () => {
+  const handleSubmit = async () => {
     setIsLoading(true);
-
-    const res = await fetch('/genesis', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        secret: password,
-        firstName,
-        lastName,
-      }),
-    });
+    mutate({ email, password, firstName, lastName });
   };
 
   return (
+    <div className={'space-y-1'}>
+      <Input
+        variant={'large'}
+        label={'Email'}
+        value={email}
+        type={'email'}
+        placeholder={'Email'}
+        onChange={handleEmailChange}
+      />
+      <Input
+        variant={'large'}
+        label={'Password'}
+        type={'password'}
+        placeholder={'Password'}
+        autoComplete={'current-password'}
+        onChange={handlePasswordChange}
+      />
+      <Input
+        variant={'large'}
+        label={'First Name'}
+        type={'text'}
+        autoComplete={'given-name'}
+        placeholder={'First Name'}
+        onChange={handleFirstNameChange}
+      />
+      <Input
+        variant={'large'}
+        label={'Last Name'}
+        type={'text'}
+        autoComplete={'family-name'}
+        placeholder={'Last Name'}
+        onChange={handleLastNameChange}
+      />
+      <Button variant={'action'} onClick={handleSubmit}>
+        Login
+      </Button>
+    </div>
+  );
+}
+
+function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setIsLoading(true);
+    loginWithPassword(email, password);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setPassword(e.target.value);
+  };
+
+  return (
+    <div className={'space-y-1'}>
+      <Input
+        variant={'large'}
+        label={'Email'}
+        value={email}
+        type={'email'}
+        placeholder={'Email'}
+        autoComplete={'email'}
+        onChange={handleEmailChange}
+      />
+      <Input
+        variant={'large'}
+        label={'Password'}
+        type={'password'}
+        placeholder={'Password'}
+        value={password}
+        autoComplete={'current-password'}
+        onChange={handlePasswordChange}
+      />
+      <Button variant={'action'} onClick={handleLogin}>
+        Login
+      </Button>
+    </div>
+  );
+}
+
+function Auth() {
+  const [isCreateAccount, setIsCreateAccount] = useState(false);
+  return (
     <Layout>
       <Layout.Body>
-        <form className="">
-          <Toggle enabled={isGenesis} setEnabled={setIsGenesis} />
-          <div className="">
-            <Heading variant="h2">Halfleap Admin Login</Heading>
-            <Text variant="body">Please login with your Github account</Text>
-          </div>
-          <div>
-            <Input
-              variant={'large'}
-              label={'Email'}
-              value={email}
-              type={'email'}
-              placeholder={'Email'}
-              onChange={handleEmailChange}
-            />
-            <Input
-              variant={'large'}
-              label={'Password'}
-              type={'password'}
-              placeholder={'Password'}
-              onChange={handlePasswordChange}
-            />
-          </div>
-          {isGenesis && (
-            <>
-              <Input
-                variant={'large'}
-                label={'First Name'}
-                type={'text'}
-                autoComplete={'given-name'}
-                placeholder={'First Name'}
-                onChange={handleFirstNameChange}
-              />
-              <Input
-                variant={'large'}
-                label={'Last Name'}
-                type={'text'}
-                autoComplete={'family-name'}
-                placeholder={'Last Name'}
-                onChange={handleLastNameChange}
-              />
-            </>
+        <Toggle enabled={isCreateAccount} setEnabled={setIsCreateAccount} />
+        <form className="max-w-lg space-y-2">
+          {isCreateAccount ? (
+            <div className="">
+              <Heading variant="h2">Create a new Halfleap Admin Account</Heading>
+              <Text variant="body"></Text>
+              <CreateAccount />
+            </div>
+          ) : (
+            <div className="">
+              <Heading variant="h2">Halfleap Admin Login</Heading>
+              <Text variant="body"></Text>
+              <Login />
+            </div>
           )}
-          <Button variant={'action'} onClick={handleLogin}>
-            Login with Github
-          </Button>
         </form>
       </Layout.Body>
     </Layout>

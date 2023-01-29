@@ -2,6 +2,8 @@ import { Context } from '../deps/deps.ts';
 import { supabaseAdmin } from './supabase.ts';
 
 const genesis = async (ctx: Context) => {
+	console.log('Received genesis request');
+
 	// Check if account is already initialized
 	const { data, error } = await supabaseAdmin.from('contacts').select().eq('is_me', true);
 	if (error) {
@@ -14,26 +16,19 @@ const genesis = async (ctx: Context) => {
 		return;
 	}
 
-	const { owner } = await ctx.request.body().value;
+	const { firstName, lastName, password, email } = await ctx.request.body().value;
 
-	if (!owner) {
-		ctx.response.status = 400;
-		return;
-	}
-
-	const { firstName, lastName, secret, email } = owner;
-	if (!firstName || !lastName || !secret || !email) {
+	if (!firstName || !lastName || !password || !email) {
 		ctx.response.status = 400;
 		return;
 	}
 	try {
-		const uid = supabaseAdmin.auth.admin.createUser({
+		console.log('Creating user', firstName, lastName, email);
+		const uid = await supabaseAdmin.auth.admin.createUser({
 			email: email,
-			password: secret,
+			password: password,
 			user_metadata: {
-				firstName: firstName,
-				lastName: lastName,
-				fullName: `${firstName} ${lastName}`,
+				'full_name': `${firstName} ${lastName}`,
 			},
 		}).then((res) => res.error ? new Error(res.error.message) : res.data.user.id);
 
@@ -44,11 +39,15 @@ const genesis = async (ctx: Context) => {
 
 		if (error) {
 			ctx.response.status = 500;
+			console.error(error);
 			return;
 		}
-		return ctx.response.body = data;
+
+		ctx.response.body = data;
+		ctx.response.status = 201;
+		return;
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		ctx.response.status = 500;
 		return;
 	}
