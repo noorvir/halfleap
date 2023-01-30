@@ -30,7 +30,10 @@ const genesis = async (ctx: Context) => {
 			user_metadata: {
 				'full_name': `${firstName} ${lastName}`,
 			},
-		}).then((res) => res.error ? new Error(res.error.message) : res.data.user.id);
+		}).then((res) => {
+			if (res.error) throw new Error(res.error.message);
+			return res.data.user.id;
+		});
 
 		const { data, error } = await supabaseAdmin.from('contacts').update({ is_me: true }).eq(
 			'id',
