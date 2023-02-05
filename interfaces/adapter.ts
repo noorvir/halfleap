@@ -27,7 +27,7 @@ export interface Listener extends Adapter {
 
 	handle(ctx: Context): Promise<ListenerResponseT>;
 
-	respond(ctx: Context,response: string): Promise<any>;
+	respond(ctx: Context, response: string): Promise<any>;
 
 	parseAuthenticator(ctx: Context): Promise<string | ResponseFunction>;
 }

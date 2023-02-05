@@ -26,9 +26,7 @@ async function createAccount({
     lastName,
   });
 
-  const res = await post(`${HALFLEAP_API_URL}/genesis`, body, {
-    headers: { Authorization: 'Bearer ${token}' },
-  });
+  const res = await post(`${HALFLEAP_API_URL}/genesis`, body, {});
 
   if (res.error) {
     throw new Error(res.error.message);

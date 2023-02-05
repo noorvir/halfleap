@@ -1,7 +1,6 @@
 import { Application, Middleware, oakCors } from '../deps/deps.ts';
 
 import router from './router.ts';
-import { withAuthorizedListener } from './middleware.ts';
 
 const app = new Application();
 

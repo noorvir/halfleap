@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {FiGithub} from 'react-icons/fi';
 
 import {loginWithGitHub, loginWithPassword} from 'lib/auth';
-import useCreateAccountMutation from 'lib/hooks/usCreateAccountMutation';
+import useCreateAccountMutation from 'lib/hooks/useCreateAccountMutation';
 import supabase from 'lib/supabase';
 
 // import { loginWithGitHub } from 'lib/auth';
@@ -55,7 +55,7 @@ function CreateAccount() {
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-        setEmail(e.target.value);
+        setPassword(e.target.value);
     };
 
     const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +70,8 @@ function CreateAccount() {
 
     // TODO: make sure only the admin can login
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: React.FormEvent<any>) => {
+        e.preventDefault();
         setIsLoading(true);
         mutate({email, password, firstName, lastName});
     };

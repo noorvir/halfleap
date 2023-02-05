@@ -10,23 +10,28 @@ const genesis = async (ctx: Context) => {
 		ctx.response.status = 500;
 		return;
 	}
+
 	if (data && data.length > 0) {
 		ctx.response.body = { message: 'This is not your account. Shame on you.' };
 		ctx.response.status = 403;
 		return;
 	}
 
-	const { firstName, lastName, password, email } = await ctx.request.body().value;
+	const body = await ctx.request.body({ type: 'json' }).value;
+	const { firstName, lastName, password, email } = JSON.parse(body);
 
 	if (!firstName || !lastName || !password || !email) {
+		console.warn({ email, firstName, lastName, password });
 		ctx.response.status = 400;
 		return;
 	}
+
 	try {
 		console.log('Creating user', firstName, lastName, email);
 		const uid = await supabaseAdmin.auth.admin.createUser({
 			email: email,
 			password: password,
+			email_confirm: true,
 			user_metadata: {
 				'full_name': `${firstName} ${lastName}`,
 			},

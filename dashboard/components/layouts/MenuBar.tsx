@@ -76,18 +76,18 @@ function NavigationBar(props: NavBarProps) {
 
   return (
     <div
-      className={`z-100 fixed top-0 left-0 right-0 flex h-16 w-full bg-primary-white items-center justify-between border-b px-3`}
+      className={`z-100 fixed top-0 left-0 right-0 flex h-16 w-full items-center justify-between px-3`}
     >
       <div className="flex items-center space-x-6">
         <Link href="/" className={'inline'}>
-          <Image
-            className="h-16 inline"
-            src={logo}
-            width={40}
-            height={40}
-            alt="Halfleap Logo"
-          />
-          {/*<Heading variant={"h2"} className={'inline'}>halfleap</Heading>*/}
+          {/*<Image*/}
+          {/*  className="h-16 inline"*/}
+          {/*  src={logo}*/}
+          {/*  width={40}*/}
+          {/*  height={40}*/}
+          {/*  alt="Halfleap Logo"*/}
+          {/*/>*/}
+          <Heading variant={"h2"} className={'inline'}>halfleap</Heading>
         </Link>
         {breadcrumbs || null}
       </div>
