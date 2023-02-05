@@ -21,7 +21,7 @@ async function createAccount({
 }: AccountCreateVars) {
   const body = JSON.stringify({
     email,
-    secret: password,
+    password,
     firstName,
     lastName,
   });

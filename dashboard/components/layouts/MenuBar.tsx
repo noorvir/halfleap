@@ -8,7 +8,7 @@ import { logout } from 'lib/auth';
 import useAuthUser from 'lib/hooks/useAuthUser';
 import { AuthUser } from 'lib/types';
 
-import {Heading, Text} from 'components/ui/Typography';
+import { Heading, Text } from 'components/ui/Typography';
 
 import logo from '../../public/logo.svg';
 
@@ -26,7 +26,16 @@ const Account: React.FC<Props> = ({ user }) => {
   return (
     <Menu className="relative" as={'div'}>
       <Menu.Button className="bg-primary-blue flex h-10 w-10 items-center justify-center overflow-hidden rounded-full">
-        {user.user_metadata.avatar_url? <Image src={user.user_metadata.avatar_url} width={40} height={40} alt="avatar"/> : <FiUser size={24} />}
+        {user.user_metadata.avatar_url ? (
+          <Image
+            src={user.user_metadata.avatar_url}
+            width={40}
+            height={40}
+            alt="avatar"
+          />
+        ) : (
+          <FiUser size={24} />
+        )}
       </Menu.Button>
       <Transition
         as={Fragment}
@@ -37,11 +46,8 @@ const Account: React.FC<Props> = ({ user }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-3 flex flex-col space-y-5 rounded-lg p-4 bg-system-grey2">
-          <Link
-            href={'/settings'}
-            className="transition-colors hover:text-system-grey4"
-          >
+        <Menu.Items className="absolute right-0 mt-3 flex flex-col space-y-5 rounded-lg bg-system-grey2 p-4">
+          <Link href={'/settings'} className="transition-colors hover:text-system-grey4">
             <Text variant="body" className="flex items-center">
               <FiUser size={16} className="mr-2" />
               Settings
@@ -69,7 +75,7 @@ type NavBarProps = {
   breadcrumbs?: React.ReactElement;
 };
 
-function NavigationBar(props: NavBarProps) {
+function NavBar(props: NavBarProps) {
   const { breadcrumbs } = props;
 
   const user = useAuthUser();
@@ -87,7 +93,9 @@ function NavigationBar(props: NavBarProps) {
           {/*  height={40}*/}
           {/*  alt="Halfleap Logo"*/}
           {/*/>*/}
-          <Heading variant={"h2"} className={'inline'}>halfleap</Heading>
+          <Heading variant={'h2'} className={'inline'}>
+            halfleap
+          </Heading>
         </Link>
         {breadcrumbs || null}
       </div>
@@ -99,4 +107,4 @@ function NavigationBar(props: NavBarProps) {
   );
 }
 
-export default NavigationBar;
+export default NavBar;

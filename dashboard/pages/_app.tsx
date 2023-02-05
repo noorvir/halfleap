@@ -15,7 +15,6 @@ function Wrapped({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const session = useSession();
 
-  console.log('session', session)
   if (!session) {
     return <Auth />;
   }
@@ -25,7 +24,7 @@ function Wrapped({ Component, pageProps }: AppProps) {
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <main>
+    <main className={'bg-primary-white'}>
       <QueryClientProvider client={queryClient}>
         <SessionContextProvider
           supabaseClient={supabase}
