@@ -23,34 +23,41 @@ alter table halfleap.shared_locations
 
 -- Policies
 
--- Give user full access on all of their own data (except for events).
+-- Give user full access on all of their own data (except for events - only select).
+
+create policy "Allow the account owner read access to their events" on halfleap.events
+    for select
+    using (auth.email() = (select email
+                         from halfleap.contacts
+                         where is_me = true));
+
 create policy "Allow the account owner full access to their adapters" on halfleap.adapters
     for all
-    using (auth.uid() = (select id
+    using (auth.email() = (select email
                          from halfleap.contacts
                          where is_me = true));
 
 create policy "Allow the account owner full access to their contacts" on halfleap.contacts
     for all
-    using (auth.uid() = (select id
+    using (auth.email() = (select email
                          from halfleap.contacts
                          where is_me = true));
 
 create policy "Allow the account owner full access to their locations" on halfleap.locations
     for all
-    using (auth.uid() = (select id
+    using (auth.email() = (select email
                          from halfleap.contacts
                          where is_me = true));
 
 create policy "Allow the account owner full access to their notes" on halfleap.notes
     for all
-    using (auth.uid() = (select id
+    using (auth.email() = (select email
                          from halfleap.contacts
                          where is_me = true));
 
 create policy "Allow the account owner full access to their resources" on halfleap.resources
     for all
-    using (auth.uid() = (select id
+    using (auth.email() = (select email
                          from halfleap.contacts
                          where is_me = true));
 
