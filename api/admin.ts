@@ -17,8 +17,7 @@ const genesis = async (ctx: Context) => {
 		return;
 	}
 
-	const body = await ctx.request.body({ type: 'json' }).value;
-	const { firstName, lastName, password, email } = JSON.parse(body);
+	const { firstName, lastName, password, email } = await ctx.request.body({ type: 'json' }).value;
 
 	if (!firstName || !lastName || !password || !email) {
 		console.warn({ email, firstName, lastName, password });

@@ -19,7 +19,7 @@ export async function post<T = any>(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body: body,
       ...options,
     });
 
