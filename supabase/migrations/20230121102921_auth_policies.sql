@@ -23,43 +23,36 @@ alter table halfleap.shared_locations
 
 -- Policies
 
+create function is_me(email text) returns bool as
+$$
+select exists(select 1 from halfleap.contacts where contacts.email = $1);
+$$ language sql security definer;
+
 -- Give user full access on all of their own data (except for events - only select).
 
 create policy "Allow the account owner read access to their events" on halfleap.events
     for select
-    using (auth.email() = (select email
-                         from halfleap.contacts
-                         where is_me = true));
+    using (is_me(auth.email()));
 
 create policy "Allow the account owner full access to their adapters" on halfleap.adapters
     for all
-    using (auth.email() = (select email
-                         from halfleap.contacts
-                         where is_me = true));
+    using (is_me(auth.email()));
 
 create policy "Allow the account owner full access to their contacts" on halfleap.contacts
     for all
-    using (auth.email() = (select email
-                         from halfleap.contacts
-                         where is_me = true));
+    using (is_me(auth.email()));
 
 create policy "Allow the account owner full access to their locations" on halfleap.locations
     for all
-    using (auth.email() = (select email
-                         from halfleap.contacts
-                         where is_me = true));
+    using (is_me(auth.email()));
 
 create policy "Allow the account owner full access to their notes" on halfleap.notes
     for all
-    using (auth.email() = (select email
-                         from halfleap.contacts
-                         where is_me = true));
+    using (is_me(auth.email()));
 
 create policy "Allow the account owner full access to their resources" on halfleap.resources
     for all
-    using (auth.email() = (select email
-                         from halfleap.contacts
-                         where is_me = true));
+    using (is_me(auth.email()));
 
 
 -- Add permissions for public and shared data
