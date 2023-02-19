@@ -1,4 +1,4 @@
-import { Context } from '../deps/deps.ts';
+import { Context } from 'https://deno.land/x/oak@v10.6.0/mod.ts';
 import { Database } from './database.types.ts';
 
 export type AdapterT = Database['halfleap']['Tables']['adapters']['Row'];
@@ -18,16 +18,14 @@ export type ListenerResponseT = {
 	response?: ResponseFunction;
 };
 
+export type HlBody = {
+	[key: string]: any;
+};
+
 export interface Listener extends Adapter {
-	/**
-	 * id: string;
-	 *  ID of the adapter in the db. This is specific to the user.
-	 */
-	id: string;
+	handle(body: HlBody): Promise<ListenerResponseT>;
 
-	handle(ctx: Context): Promise<ListenerResponseT>;
-
-	respond(ctx: Context, response: string): Promise<any>;
+	respond(response: string): Promise<any>;
 
 	parseAuthenticator(ctx: Context): Promise<string | ResponseFunction>;
 }

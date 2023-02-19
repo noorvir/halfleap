@@ -27,10 +27,11 @@ router.post(`/listen/:listener`, async (ctx) => {
 	let res: ListenerResponseT;
 
 	try {
-		res = await listener.handle(ctx);
+		const body = await ctx.request.body({ type: 'json' }).value;
+		res = await listener.handle(body);
 		event = await supabaseAdmin.from('events').insert({
 			data: res.data,
-			source: listener.id,
+			source: listener.getID(),
 			type: 'ingress',
 		}).select('*').then((res): EventT => {
 			if (res.error) {
