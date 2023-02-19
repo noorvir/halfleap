@@ -1,5 +1,4 @@
-import { Listener, ListenerResponseT, ResponseFunction } from '../../interfaces/adapter.ts';
-import { Context } from 'https://deno.land/x/oak@v10.6.0/context.ts';
+import { Listener, ListenerResponseT, ResponseFunction } from 'interfaces/adapter.ts';
 
 const NAME = 'telegram';
 
