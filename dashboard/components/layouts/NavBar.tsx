@@ -1,12 +1,10 @@
 import Link from 'next/link';
 
-import { Heading } from '../ui/Typography';
-
 function NavBar() {
   return (
-    <div className={'w-1/6 bg-cyan-100'}>
+    <div className={'bg-cyan-100 w-1/6'}>
       <ul>
-        <Heading variant={'h3'}>Nav</Heading>
+        <h3>Nav</h3>
         <li>
           <Link href={'/'}>Dashboard</Link>
         </li>
@@ -18,7 +16,7 @@ function NavBar() {
         </li>
       </ul>
       <ul>
-        <Heading variant={'h3'}>Account</Heading>
+        <h3>Account</h3>
         <li>
           <Link href={'/adapters'}>Adapters</Link>
         </li>

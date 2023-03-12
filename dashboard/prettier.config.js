@@ -2,7 +2,7 @@ module.exports = {
   tabWidth: 2,
   semi: true,
   singleQuote: true,
-  printWidth: 90,
+  printWidth: 100,
   importOrder: ['^lib/(.*)$', '^components/(.*)$', '^interfaces/(.*)$', '^[./]'],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,

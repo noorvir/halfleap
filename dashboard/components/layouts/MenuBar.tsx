@@ -8,8 +8,6 @@ import { logout } from 'lib/auth';
 import useAuthUser from 'lib/hooks/useAuthUser';
 import { AuthUser } from 'lib/types';
 
-import { Heading, Text } from 'components/ui/Typography';
-
 import logo from '../../public/logo.svg';
 
 interface Props {
@@ -27,12 +25,7 @@ const Account: React.FC<Props> = ({ user }) => {
     <Menu className="relative" as={'div'}>
       <Menu.Button className="bg-primary-blue flex h-10 w-10 items-center justify-center overflow-hidden rounded-full">
         {user.user_metadata.avatar_url ? (
-          <Image
-            src={user.user_metadata.avatar_url}
-            width={40}
-            height={40}
-            alt="avatar"
-          />
+          <Image src={user.user_metadata.avatar_url} width={40} height={40} alt="avatar" />
         ) : (
           <FiUser size={24} />
         )}
@@ -48,19 +41,16 @@ const Account: React.FC<Props> = ({ user }) => {
       >
         <Menu.Items className="absolute right-0 mt-3 flex flex-col space-y-5 rounded-lg bg-system-grey2 p-4">
           <Link href={'/settings'} className="transition-colors hover:text-system-grey4">
-            <Text variant="body" className="flex items-center">
+            <p className="flex items-center">
               <FiUser size={16} className="mr-2" />
               Settings
-            </Text>
+            </p>
           </Link>
           <button onClick={() => logout()}>
-            <Text
-              variant="body"
-              className="flex items-center text-system-grey6 hover:text-system-grey4 "
-            >
+            <p className="flex items-center text-system-grey6 hover:text-system-grey4 ">
               <FiLogOut size={16} className="mr-2" />
               Log out
-            </Text>
+            </p>
           </button>
         </Menu.Items>
       </Transition>
@@ -86,16 +76,7 @@ function NavBar(props: NavBarProps) {
     >
       <div className="flex items-center space-x-6">
         <Link href="/" className={'inline'}>
-          {/*<Image*/}
-          {/*  className="h-16 inline"*/}
-          {/*  src={logo}*/}
-          {/*  width={40}*/}
-          {/*  height={40}*/}
-          {/*  alt="Halfleap Logo"*/}
-          {/*/>*/}
-          <Heading variant={'h2'} className={'inline'}>
-            halfleap
-          </Heading>
+          <h2 className={'inline'}>halfleap</h2>
         </Link>
         {breadcrumbs || null}
       </div>

@@ -1,42 +1,39 @@
 import React from 'react';
 
-import Text from '../Typography/Text';
-
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string | null;
-  variant: 'large' | 'small';
-  disabled?: boolean;
   label?: string | undefined;
 }
 
-export default function Input(props: InputProps) {
-  const { variant, error, value, label, className, ...rest } = props;
-  const base = `flex flex-col-reverse items-start justify-center max-w-full rounded-xl px-3 font-inter`;
-  const extra = `${variant === 'large' ? ' h-17' : 'h-11.5'}`;
-  const classes = `${base} ${extra}`;
-
+export default function Input({
+  type = 'text',
+  name,
+  label,
+  error,
+  className,
+  ...rest
+}: InputProps) {
   return (
-    <div className="rounded-md border border-gray-300 px-3 py-2 shadow-sm focus-within:border-indigo-600 focus-within:ring-1 focus-within:ring-indigo-600">
-      <label htmlFor="name" className="block text-xs font-medium text-gray-900">
-        {label}
+    <div>
+      <label
+        htmlFor="email"
+        className={`text-sm text-gray-900 flex justify-between font-medium leading-6 ${className}`}
+      >
+        <span>{label}</span>
       </label>
-      <input
-        className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
-        {...rest}
-      />
+      <div className="relative mt-1 rounded-md shadow-sm">
+        <input
+          type={type}
+          name={name}
+          className={`text-red-900 sm:text-sm sm:leading-6 block w-full rounded-md border-0 py-1.5 pr-10 ring-1 ring-inset focus:ring-2 focus:ring-inset focus:ring-light-blue1 ${
+            error && 'ring-red placeholder:text-red focus:ring-red'
+          }`}
+          {...rest}
+        />
+      </div>
+      <p className={`mt-0.5 ml-0.5 block text-caption text-red ${error ? 'visible' : 'invisible'}`}>
+        {error || '-'}
+      </p>
     </div>
-    // <div className={classes}>
-    //   <input className={classes} value={value} {...rest} />
-    //   {value && (
-    //     <label htmlFor="name">
-    //       {label}
-    //       {error && (
-    //         <Text variant={'caption'} className="inline-block pl-1">
-    //           {error}
-    //         </Text>
-    //       )}
-    //     </label>
-    //   )}
-    // </div>
   );
 }

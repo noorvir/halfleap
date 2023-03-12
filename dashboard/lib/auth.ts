@@ -27,4 +27,17 @@ async function loginWithPassword(email: string, password: string) {
   }
 }
 
-export { loginWithGitHub, loginWithPassword, logout };
+async function loginWithMagicLink(email: string) {
+  const { data, error } = await supabase.auth.signInWithOtp({
+    email: email,
+    options: {
+      emailRedirectTo: 'https://example.com/welcome',
+    },
+  })
+  if (error) {
+    console.error(error);
+  }
+}
+
+
+export { loginWithGitHub, loginWithPassword, loginWithMagicLink, logout };
